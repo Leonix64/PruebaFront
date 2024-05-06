@@ -1,20 +1,58 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Crear, Mostrar, Actualizar y Eliminar</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="container">
+    <!-- Formulario para subir datos -->
+    <ion-card class="upload-form">
+      <ion-card-header>
+        <ion-card-title>Subir nueva entrada</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Título</ion-label>
+          <ion-input type="text" [(ngModel)]="userData.title"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Descripción</ion-label>
+          <ion-textarea rows="4" [(ngModel)]="userData.description"></ion-textarea>
+        </ion-item>
+        <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+        <ion-button expand="block" (click)="createUserData()" [disabled]="!selectedFile">Subir</ion-button>
+      </ion-card-content>
+    </ion-card>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <!-- Mostrar datos subidos -->
+    <div class="card-container">
+      <ion-card *ngFor="let upload of uploads" class="upload-card">
+        <img [src]="dataURItoImage(upload.image)" alt="Imagen Subida" (click)="fileInput.click()" style="cursor: pointer;" />
+        <input type="file" #fileInput style="display: none;" (change)="onNewImageSelected($event, upload)" accept="image/*" />
+        <ion-card-header>
+          <ion-card-title>
+            <ion-label>Título:</ion-label>
+            <ion-input type="text" [(ngModel)]="upload.title" (input)="enableSaveButton(upload)"></ion-input>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>
+            <ion-label>Descripción:</ion-label>
+            <ion-textarea rows="4" [(ngModel)]="upload.description" (input)="enableSaveButton(upload)"></ion-textarea>
+          </p>
+          <p>Fecha de creación: {{ upload.created_at }}</p>
+          <div class="button-container">
+            <!-- Actualizar un registro -->
+            <ion-button (click)="saveChanges(upload)" [disabled]="!upload.changesMade">Guardar Cambios</ion-button>
+            <!-- Eliminar un registro -->
+            <ion-button (click)="deleteUpload(upload.id)">Eliminar</ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
   </div>
 </ion-content>

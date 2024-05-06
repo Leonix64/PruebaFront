@@ -1,3 +1,26 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-menu contentId="menu-content" menuId="menu-content" side="start">
+    <ion-content scrollY="false" class="menu-content">
+      <div class="menu-header">
+        <ion-label>
+          <h2 class="name">¡Bienvenido!</h2>
+        </ion-label>
+      </div>
+
+      <ion-list class="menu-item">
+        <ion-menu-toggle>
+
+          <ion-item>
+            <ion-button expand="full" (click)="CerrarSesion()">
+              <ion-icon name="log-out" slot="start"></ion-icon> Cerrar Sesión
+            </ion-button>
+          </ion-item>
+          
+        </ion-menu-toggle>
+      </ion-list>
+
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet id="menu-content"></ion-router-outlet>
 </ion-app>
